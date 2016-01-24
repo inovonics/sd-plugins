@@ -16,7 +16,7 @@ class TWCProxy( object):
         self.enable = self.rawConfig[ 'TWCProxy'][ 'enable']
 
     def run( self):
-        if( self.enable == True):
+        if( self.enable == 'True'):
             result = { 'numDevices': 0, 'numClients': 0}
             command = "redis-cli -h %s -p %s KEYS '*'" % ( self.redisHost, self.redisPort)
             process = Popen( command, shell=True, stdout=PIPE, preexec_fn=lambda: os.close( 0))

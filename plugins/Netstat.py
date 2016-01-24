@@ -16,7 +16,7 @@ class Netstat(object):
         self.enable = rawConfig[ 'Netstat'][ 'enable']
 
     def run(self):
-        if( self.enable == True):
+        if( self.enable == 'True'):
             result = {}
             process = Popen('netstat -tn', shell=True, stdout=PIPE, preexec_fn=lambda: os.close(0))
             stdout, dummy_stderr = process.communicate()

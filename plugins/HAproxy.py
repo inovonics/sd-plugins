@@ -13,7 +13,7 @@ class HAproxy:
         self.enable = self.rawConfig[ 'HAproxy'][ 'enable']
     
     def run(self):
-        if( self.enable == True):
+        if( self.enable == 'True'):
             results = {}
             url = "http://%s:%s/;csv" % ( self.host, self.port)
             resp = requests.get( url)
