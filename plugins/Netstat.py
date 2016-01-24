@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# This is a Server Density netstat plugin
-# Author: yaniv.aknin@audish.com
+# This is a Server Density netstat plugin with a bit of modification.
+# Original Author: yaniv.aknin@audish.com
 
 import platform
 assert platform.system() == 'Linux', 'I ought to run in Linux'
