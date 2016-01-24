@@ -13,26 +13,29 @@ class TWCProxy( object):
         self.rawConfig = rawConfig
         self.redisHost = self.rawConfig[ 'TWCProxy'][ 'redis-host']
         self.redisPort = self.rawConfig[ 'TWCProxy'][ 'redis-port']
-        self.enabled = self.rawConfig[ 'TWCProxy'][ 'enabled']
+        self.enable = self.rawConfig[ 'TWCProxy'][ 'enable']
 
     def run( self):
-        result = { 'numDevices': 0, 'numClients': 0}
-        command = "redis-cli -h %s -p %s KEYS '*'" % ( self.redisHost, self.redisPort)
-        process = Popen( command, shell=True, stdout=PIPE, preexec_fn=lambda: os.close( 0))
-        stdout, dummy_stderr = process.communicate()
-        # This should return a line for each key that exists.
-        # If the set is empty, an empty line is returned, so we'll need to check for that
-        lines = stdout.splitlines()
-        if len( lines) == 1 and lines[ 0] == '':
-            result[ 'numDevices'] = 0
-            result[ 'numClients'] = 0
+        if( self.enable == True):
+            result = { 'numDevices': 0, 'numClients': 0}
+            command = "redis-cli -h %s -p %s KEYS '*'" % ( self.redisHost, self.redisPort)
+            process = Popen( command, shell=True, stdout=PIPE, preexec_fn=lambda: os.close( 0))
+            stdout, dummy_stderr = process.communicate()
+            # This should return a line for each key that exists.
+            # If the set is empty, an empty line is returned, so we'll need to check for that
+            lines = stdout.splitlines()
+            if len( lines) == 1 and lines[ 0] == '':
+                result[ 'numDevices'] = 0
+                result[ 'numClients'] = 0
+            else:
+                for line in lines:
+                    if 'device' in line:
+                        result[ 'numDevices'] = result[ 'numDevices'] + 1
+                    elif 'client' in line:
+                        result[ 'numClients'] = result[ 'numClients'] + 1
+            return result
         else:
-            for line in lines:
-                if 'device' in line:
-                    result[ 'numDevices'] = result[ 'numDevices'] + 1
-                elif 'client' in line:
-                    result[ 'numClients'] = result[ 'numClients'] + 1
-        return result
+            return {}
 
 if __name__ == '__main__':
     import logging
